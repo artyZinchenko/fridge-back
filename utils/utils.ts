@@ -5,7 +5,7 @@ import {
   NewRecipe,
   Measures,
   MeasuresObj,
-} from './types';
+} from '../types';
 
 export const toNewRecipe = ({
   id,

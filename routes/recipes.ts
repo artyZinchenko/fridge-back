@@ -2,68 +2,54 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import express from 'express';
 import axios from 'axios';
-import { toNewRecipe } from '../utils';
-import { Fields, ResultArr, NewRecipe, RecipeId } from '../types';
+import { ResultArr, RecipeId } from '../types';
 import {
   saveIngredientsToDB,
   saveRecipesToDB,
 } from '../services/databaseServices';
+import { formatRecipes } from '../utils/formating';
+import { headers } from '../utils/headers';
 
 const route = express.Router();
 
 route.post('/byIngredients', async (req, res) => {
   console.log('by ingreds');
   const { ingredNameString } = req.body;
-  try {
-    const { data }: { data: RecipeId[] } = await axios.get(
-      `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${ingredNameString}&number=2`,
-      {
-        headers: {
-          'Accept-Encoding': 'gzip,deflate,compress',
-          'x-api-key': process.env.FOOD_API_KEY,
-        },
-      }
-    );
-    const ids = data.map((el) => el.id).toString();
 
-    const bulkResponse = await axios.get(
-      `https://api.spoonacular.com/recipes/informationBulk?ids=${ids}`,
-      {
-        headers: {
-          'Accept-Encoding': 'gzip,deflate,compress',
-          'x-api-key': process.env.FOOD_API_KEY,
-        },
-      }
-    );
+  const { data }: { data: RecipeId[] } = await axios.get(
+    `https://api.spoonacular.com/recipes/findByIngredients?ingredients=${ingredNameString}&number=2`,
+    { headers: headers }
+  );
+  const ids = data.map((el) => el.id).toString();
 
-    console.log('information bulk', bulkResponse.data.length);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    const formatedRecipes: (null | NewRecipe)[] = bulkResponse.data.map(
-      (el: Fields) => toNewRecipe(el)
-    );
+  const bulkResponse = await axios.get(
+    `https://api.spoonacular.com/recipes/informationBulk?ids=${ids}`,
+    { headers: headers }
+  );
 
-    const recipes: NewRecipe[] = formatedRecipes
-      .filter((recipe) => recipe !== null)
-      .map((el) => el as NewRecipe);
+  const recipes = formatRecipes(bulkResponse.data);
 
-    res.send(recipes);
+  res.send(recipes);
 
-    await saveIngredientsToDB(recipes);
-    await saveRecipesToDB(recipes);
-  } catch (error: unknown) {
-    let errorMessage = 'Something went wrong';
+  await saveIngredientsToDB(recipes);
+  await saveRecipesToDB(recipes);
+});
 
-    if (error instanceof Error) {
-      errorMessage += ' Error: ' + error.message;
-    }
+route.get('/randomRecipes', async (_req, res) => {
+  const response = await axios.get(
+    `https://api.spoonacular.com/recipes/random?number=1`,
+    { headers: headers }
+  );
 
-    console.log(errorMessage);
-    res.send(error);
-  }
+  const recipes = formatRecipes(response.data.recipes);
+
+  res.send(recipes);
+
+  await saveIngredientsToDB(recipes);
+  await saveRecipesToDB(recipes);
 });
 
 route.post('/complexSearch', async (req, res) => {
-  console.log('post');
   const mealType: string = req.body.options.mealType
     ? `&type=${req.body.options.mealType}`
     : '';
@@ -73,49 +59,33 @@ route.post('/complexSearch', async (req, res) => {
   const dietType: string = req.body.options.dietType
     ? `&diet=${req.body.options.dietType}`
     : '';
-  try {
-    const { data }: { data: ResultArr } = await axios.get(
-      `https://api.spoonacular.com/recipes/complexSearch?number=2` +
-        mealType +
-        cuisineType +
-        dietType,
-      {
-        headers: {
-          'Accept-Encoding': 'gzip,deflate,compress',
-          'x-api-key': process.env.FOOD_API_KEY,
-        },
-      }
-    );
-    console.log('complex search', data.results.length);
 
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    const ids = data.results.map((el) => el.id).toString();
-
-    const bulkResponse = await axios.get(
-      `https://api.spoonacular.com/recipes/informationBulk?ids=${ids}`,
-      {
-        headers: {
-          'Accept-Encoding': 'gzip,deflate,compress',
-          'x-api-key': process.env.FOOD_API_KEY,
-        },
-      }
-    );
-
-    console.log('information bulk', bulkResponse.data.length);
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
-    const formatedRecipes: (null | NewRecipe)[] = bulkResponse.data.map(
-      (el: Fields) => toNewRecipe(el)
-    );
-
-    res.send(formatedRecipes.filter((recipe) => recipe !== null));
-  } catch (error: unknown) {
-    let errorMessage = 'Something went wrong';
-    if (error instanceof Error) {
-      errorMessage += ' Error: ' + error.message;
+  const { data }: { data: ResultArr } = await axios.get(
+    `https://api.spoonacular.com/recipes/complexSearch?number=2` +
+      mealType +
+      cuisineType +
+      dietType,
+    {
+      headers: headers,
     }
-    console.log(errorMessage);
-    res.send(error);
-  }
+  );
+
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-call
+  const ids = data.results.map((el) => el.id).toString();
+
+  const bulkResponse = await axios.get(
+    `https://api.spoonacular.com/recipes/informationBulk?ids=${ids}`,
+    {
+      headers: headers,
+    }
+  );
+
+  const recipes = formatRecipes(bulkResponse.data);
+
+  res.send(recipes);
+
+  await saveIngredientsToDB(recipes);
+  await saveRecipesToDB(recipes);
 });
 
 // route.get('/:id', async (req, res) => {
