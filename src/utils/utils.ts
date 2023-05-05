@@ -5,9 +5,10 @@ import {
   NewRecipe,
   Measures,
   MeasuresObj,
-} from '../types';
+} from '../../types';
+import { optimizeImg } from './imageOptimization';
 
-export const toNewRecipe = ({
+export const toNewRecipe = async ({
   id,
   readyInMinutes,
   sourceName,
@@ -28,12 +29,12 @@ export const toNewRecipe = ({
   summary,
   creditsText,
   servings,
-}: Fields): NewRecipe | null => {
+}: Fields): Promise<NewRecipe | null> => {
   try {
     const newRecipeInfo = {
       id: parseNumber('id', id),
       title: parseString('title', title),
-      image: parseString('imageUrl', image),
+      image: await parseImg(image),
       imageType: parseImageType(imageType),
       readyInMinutes: parseNumber('ready in minutes', readyInMinutes),
       sourceName: parseString('sourseName', sourceName),
@@ -62,10 +63,15 @@ export const toNewRecipe = ({
   }
 };
 
-const parseImageType = (string: unknown): 'jpg' | 'JPG' => {
+const parseImageType = (string: unknown): 'jpg' | 'JPG' | 'png' | 'PNG' => {
   if (!string || !isString(string))
     throw new Error('Missing or incorrect image type');
-  if (string !== 'jpg' && string !== 'JPG')
+  if (
+    string !== 'jpg' &&
+    string !== 'JPG' &&
+    string !== 'png' &&
+    string !== 'PNG'
+  )
     throw new Error(`Incorrect image type ${string}`);
   return string;
 };
@@ -79,7 +85,6 @@ const parseCuisines = (label: string, arr: unknown): Array<string> => {
 
 const parseIngredsFromApi = (label: string, arr: unknown): IngredFromApi[] => {
   if (!Array.isArray(arr)) throw new Error(`Missing ${label}`);
-  console.log(`${label} ingred arr length ${arr.length}`);
 
   const parsedArr: (IngredFromApi | null)[] = arr.map((el) => {
     try {
@@ -99,8 +104,15 @@ const parseIngredsFromApi = (label: string, arr: unknown): IngredFromApi[] => {
   const correctArr: IngredFromApi[] = parsedArr
     .filter((val) => val !== null)
     .map((el) => el as IngredFromApi);
-  console.log(`${label} array returning ${correctArr.length} ingreds `);
+
   return correctArr;
+};
+
+const parseImg = async (url: unknown): Promise<string> => {
+  const urlString = parseString('parsing img', url);
+  const newUrl = await optimizeImg(urlString);
+
+  return parseString('parsing new img url', newUrl);
 };
 
 function isMeasures(measures: unknown): measures is Measures {

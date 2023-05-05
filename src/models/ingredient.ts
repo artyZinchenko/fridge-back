@@ -2,7 +2,7 @@ import mongoose from 'mongoose';
 
 const Schema = mongoose.Schema;
 
-const ingredientSchema = new Schema({
+export const ingredientSchema = new Schema({
   aisle: { type: String, required: true },
   name: { type: String, required: true },
   id: { type: Number, required: true },
@@ -10,9 +10,11 @@ const ingredientSchema = new Schema({
   measures: {
     metric: {
       unitLong: { type: String, required: true },
+      amount: { type: Number, required: true },
     },
     us: {
       unitLong: { type: String, required: true },
+      amount: { type: Number, required: true },
     },
   },
 });

@@ -1,5 +1,8 @@
-export interface Ingredient {
-  ingredient: string;
+export interface UserType {
+  id: string;
+  ingredients: IngredFromApi[];
+  recipes: number[];
+  pantryIngredients: IngredientId[];
 }
 
 export interface IngredFromApi {
@@ -7,11 +10,8 @@ export interface IngredFromApi {
   name: string;
   id: number;
   measures: Measures;
-  amount: number;
   image: string;
 }
-
-export type IngredToDB = Omit<IngredFromApi, 'amount'>;
 
 export interface Measures {
   metric: MeasuresObj;
@@ -28,6 +28,11 @@ export interface ResultArr {
 }
 
 export interface RecipeId {
+  id: number;
+}
+
+export interface IngredientId {
+  name: string;
   id: number;
 }
 
@@ -54,11 +59,12 @@ export interface Fields {
   summary: unknown;
   creditsText: unknown;
 }
+
 export interface NewRecipe {
   id: number;
   title: string;
   image: string;
-  imageType: 'jpg' | 'JPG';
+  imageType: 'jpg' | 'JPG' | 'png' | 'PNG';
   readyInMinutes: number;
   sourceName: string;
   sourceUrl: string;

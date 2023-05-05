@@ -1,9 +1,11 @@
 import express from 'express';
 import cors from 'cors';
-import recipeRoute from './routes/recipes';
+import recipeRoute from './src/recipeRoute/recipes';
+import userRoute from './src/userRoute/users';
+import ingredientRoute from './src/ingredientRoute/ingredients';
 import mongoose from 'mongoose';
-import config from './utils/config';
-import middleware from './utils/middleware';
+import config from './src/utils/config';
+import middleware from './src/utils/middleware';
 
 const app = express();
 
@@ -19,7 +21,9 @@ mongoose
 
 app.use(cors());
 app.use(express.json());
+app.use('/api/users', userRoute);
 app.use('/api/recipes', recipeRoute);
+app.use('/api/ingredients', ingredientRoute);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandling);
