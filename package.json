@@ -8,11 +8,12 @@
     "node": "14.x"
   },
   "scripts": {
+    "build": "tsc",
     "tsc": "tsc",
     "test": "echo \"Error: no test specified\" && exit 1",
     "dev": "ts-node-dev index.ts",
     "lint": "eslint --ext .ts .",
-    "start": "node index.js"
+    "start": "node ./dist/index.js"
   },
   "author": "",
   "license": "ISC",
