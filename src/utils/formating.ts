@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { Fields, NewRecipe } from '../../types';
+import { Fields, NewRecipe } from '../types';
 import { toNewRecipe } from './utils';
 
 export const formatRecipes = async (data: any): Promise<NewRecipe[]> => {

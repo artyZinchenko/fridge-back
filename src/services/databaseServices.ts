@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
-import { NewRecipe, IngredFromApi } from '../../types';
+import { NewRecipe, IngredFromApi } from '../types';
 import Ingredient from '../models/ingredient';
 import Recipe from '../models/recipes';
 import { Types as mongooseTypes } from 'mongoose';

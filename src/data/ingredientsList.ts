@@ -1,4 +1,4 @@
-import { IngredientId } from '../../types';
+import { IngredientId } from '../types';
 
 const ingredientsList: IngredientId[] = [
   {

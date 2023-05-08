@@ -5,7 +5,7 @@ import {
   NewRecipe,
   Measures,
   MeasuresObj,
-} from '../../types';
+} from '../types';
 import { optimizeImg } from './imageOptimization';
 
 export const toNewRecipe = async ({

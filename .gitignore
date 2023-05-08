@@ -5,7 +5,7 @@
 
 # testing
 /coverage
-
+/requests
 # production
 /build
 /dist

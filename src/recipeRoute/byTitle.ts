@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import express from 'express';
 import axios from 'axios';
-import { ResultArr, NewRecipe } from '../../types';
+import { ResultArr, NewRecipe } from '../types';
 import { formatRecipes } from '../utils/formating';
 import { headers } from '../utils/headers';
 

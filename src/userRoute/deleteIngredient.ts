@@ -2,7 +2,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import express from 'express';
-import { IngredFromApi } from '../../types';
+import { IngredFromApi } from '../types';
 import User from '../models/users';
 
 const route = express.Router();

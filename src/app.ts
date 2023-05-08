@@ -1,11 +1,11 @@
 import express from 'express';
 import cors from 'cors';
-import recipeRoute from './src/recipeRoute/recipes';
-import userRoute from './src/userRoute/users';
-import ingredientRoute from './src/ingredientRoute/ingredients';
+import recipeRoute from './recipeRoute/recipes';
+import userRoute from './userRoute/users';
+import ingredientRoute from './ingredientRoute/ingredients';
 import mongoose from 'mongoose';
-import config from './src/utils/config';
-import middleware from './src/utils/middleware';
+import config from './utils/config';
+import middleware from './utils/middleware';
 
 const app = express();
 

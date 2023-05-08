@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-misused-promises */
 import express from 'express';
-import { IngredientId } from '../../types';
+import { IngredientId } from '../types';
 import ingredientsList from '../data/ingredientsList';
 import { popularIngreds } from '../data/popularIngredients';
 
