@@ -6,6 +6,7 @@ import ingredientRoute from './ingredientRoute/ingredients';
 import mongoose from 'mongoose';
 import config from './utils/config';
 import middleware from './utils/middleware';
+import 'express-async-errors';
 
 const app = express();
 

@@ -64,7 +64,7 @@ export interface NewRecipe {
   id: number;
   title: string;
   image: string;
-  imageType: 'jpg' | 'JPG' | 'png' | 'PNG';
+  imageType: 'jpg' | 'JPG' | 'png' | 'PNG' | 'JPEG' | 'jpeg';
   readyInMinutes: number;
   sourceName: string;
   sourceUrl: string;

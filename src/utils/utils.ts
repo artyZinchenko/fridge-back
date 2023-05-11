@@ -63,7 +63,9 @@ export const toNewRecipe = async ({
   }
 };
 
-const parseImageType = (string: unknown): 'jpg' | 'JPG' | 'png' | 'PNG' => {
+const parseImageType = (
+  string: unknown
+): 'jpg' | 'JPG' | 'png' | 'PNG' | 'JPEG' | 'jpeg' => {
   if (!string || !isString(string))
     throw new Error('Missing or incorrect image type');
   if (

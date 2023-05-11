@@ -81,8 +81,7 @@ export default route.post(`/`, async (req, res) => {
     );
 
     const firstRecipe = await formatRecipes([response.data]);
-
-    responseArr.unshift(firstRecipe[0]);
+    if (firstRecipe[0]) responseArr.unshift(firstRecipe[0]);
   }
 
   res.send(responseArr);
