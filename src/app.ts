@@ -7,6 +7,7 @@ import mongoose from 'mongoose';
 import config from './utils/config';
 import middleware from './utils/middleware';
 import 'express-async-errors';
+import wakeup from './utils/wakeup';
 
 const app = express();
 
@@ -25,6 +26,7 @@ app.use(express.json());
 app.use('/api/users', userRoute);
 app.use('/api/recipes', recipeRoute);
 app.use('/api/ingredients', ingredientRoute);
+app.use('/wakeup', wakeup);
 
 app.use(middleware.unknownEndpoint);
 app.use(middleware.errorHandling);
